@@ -2,7 +2,7 @@
   <div class="NewsFeed section container">
 
 
-    <div class="news-item columns is-centered">
+    <!-- <div class="news-item columns is-centered">
       <div class="feed column is-6">
         <h3 class="title is-5">Trending topics</h3>
 
@@ -39,12 +39,12 @@
           <div class="field has-text-right">
             <button class="button is-link is-rounded" name="button">
               <span class="icon">
-                <i class="fab fa-facebook"></i>
+                <i class="fab fa-facebook-f"></i>
               </span>
             </button>
             <button class="button is-link is-rounded" name="button">
               <span class="icon">
-                <i class="fab fa-linkedin"></i>
+                <i class="fab fa-linkedin-in"></i>
               </span>
             </button>
             <button class="button is-info is-rounded" name="button">
@@ -56,11 +56,11 @@
         </div>
 
       </div>
-    </div>
+    </div> -->
 
     <div class="columns is-centered">
       <div class="column is-6">
-        <h3 class="title is-5">Respond to popular tweets</h3>
+        <h3 class="title is-5">Trending Topics</h3>
       </div>
     </div>
 
@@ -87,7 +87,7 @@
 
         <div class="card social-attachment">
           <div class="card-image">
-            <figure class="image is-4by3">
+            <figure class="image is-16by9">
               <img :src="tweet.attachment.imageUrl" alt="Placeholder image">
             </figure>
           </div>
@@ -124,6 +124,16 @@
             </div>
           </div>
           <div class="field has-text-right">
+            <button class="button is-link is-rounded" name="button">
+              <span class="icon">
+                <i class="fab fa-facebook-f"></i>
+              </span>
+            </button>
+            <button class="button is-link is-rounded" name="button">
+              <span class="icon">
+                <i class="fab fa-linkedin-in"></i>
+              </span>
+            </button>
             <button class="button is-info is-rounded" name="button">
               <span class="icon">
                 <i class="fab fa-twitter"></i>
@@ -189,13 +199,13 @@ export default {
     ],
     tweets: [
       {
-        author: 'Howard Dean',
-        authorAvatar: '/static/img/placeholder.png',
-        authorHandle: '@GovHowardDean',
-        time: '12h',
-        text: 'In March, Portugal Made More Than Enough Renewable Energy to Power The Whole Country',
+        author: 'Tim Rockell',
+        authorAvatar: 'https://i.imgur.com/FXSUyqo.jpg',
+        authorHandle: '@TimRockell',
+        time: 'Apr 5',
+        text: '41% of respondents say subsidies are the most important measure for driving investment in renewables',
         attachment: {
-          imageUrl: '/static/img/placeholder.png',
+          imageUrl: 'https://i.imgur.com/W1qAxrv.jpg',
           title: 'In March, Portugal Made More Than Enough Renewable Energy to Power The Whole Country',
           text: 'The country produced renewable power equal to 103.6 percent of mainland Portugal\'s electrical demand - a feat unmatched in the last 40 years.',
           source: 'npr.org'
@@ -217,13 +227,13 @@ export default {
         ]
       },
       {
-        author: 'Yusef Unjhawala',
-        authorAvatar: '/static/img/placeholder.png',
-        authorHandle: '@YusifDFI',
+        author: 'Tim Rockell',
+        authorAvatar: 'https://i.imgur.com/FXSUyqo.jpg',
+        authorHandle: '@TimRockell',
         time: 'Apr 5',
-        text: 'If we build your dams, we will buy the electricity it produces. If China builds them, don\'t expect us to buil the electricity it produces. You can sell that to Chine- Modi to tell Nepal\'s PM Oli',
+        text: 'Right now, India\'s total renewable capacity is around 42GW of installed capacity and that accounts for between 6 to 7 percent of the energy currently going into the grid.',
         attachment: {
-          imageUrl: '/static/img/placeholder.png',
+          imageUrl: 'https://i.imgur.com/EtDIxGm.jpg',
           title: 'If China builds your damns, India won\t buy energy.',
           text: 'One particular dam project, the $2.5-billion Budhi Gandaki project, on a river by the same name in central-western Nepal, is increasingly becoming...',
           source: 'indiaexpress.com'
@@ -260,13 +270,14 @@ export default {
       tweet.selectedResponse = response
     },
     updateText: function () {
-      return this.statusUpdate || this.tags[0].responses[0].text
+      return this.statusUpdate || this.tags[0].responses[0].text + '\n' + this.tags[0].hashtag
     },
     changeTagResponse: function (tag, response) {
-      this.statusUpdate = response.text
+      this.statusUpdate = response.text + '\n' + tag.hashtag
     },
     changeHashtag: function (tag) {
       this.selectedHashtag = tag.hashtag
+      this.statusUpdate = tag.responses[0].text + '\n' + tag.hashtag
     },
     getSelectedHashtag: function () {
       return this.selectedHashtag || this.tags[0].hashtag
