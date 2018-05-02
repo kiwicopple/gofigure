@@ -24,15 +24,16 @@
         </div>
       </div>
 
-      <div class="news-item columns is-centered" v-for="(stat, index) in filteredStats" :key="index">
+      <div class="news-item columns is-centered" v-for="(stat, index) in filteredStats" :key="stat.id">
 
         <div class="feed column is-6">
           <img :src="stat.image_link" v-if="stat.image_link" class="result-img" />
           <h6 class="title is-6"><a v-bind:href="stat.link">{{stat.link}}</a></h6>
           <!-- <p class="subtitle small-sub"><small>{{stat.date}} - {{stat.source}}</small></p> -->
           <div class="field content">
-            <span v-html="stat.formattedStat"></span>
-            <!-- <span v-html="stat.sentence"></span> -->
+            <div v-show="stat.previous_5.length" @click="showBeforeText(stat)" v-html="stat.beforeText"></div>
+            <p><span v-html="stat.formattedStat"></span></p>
+            <div v-show="stat.next_5.length" @click="showAfterText(stat)" v-html="stat.afterText"></div>
           </div>
           <div class="buttons has-addons is-right">
             <button class="button is-small" v-clipboard:copy="stat.stat" >COPY</button>
@@ -83,13 +84,17 @@ export default {
         }
         if (results.length > 30) break
       }
+
+      results.forEach(x => {
+        // let y = Object.assign({}, x)
+        x.formattedStat = x.sentence
+        x.id = Math.random()
+        x.beforeText = '<p><a><small>Show more</small></a></p>'
+        x.formattedStat = x.formattedStat.toLowerCase().replace(q, '<strong class="highlightText">' + q + '</strong>')
+        x.afterText = '<p><a><small>Show more</small></a></p>'
+        return x
+      })
       return results
-        .map(x => {
-          let y = Object.assign({}, x)
-          y.formattedStat = y.sentence
-          y.formattedStat = y.formattedStat.toLowerCase().replace(q, '<strong class="highlightText">' + q + '</strong>')
-          return y
-        })
     }
   },
   methods: {
@@ -100,6 +105,14 @@ export default {
     },
     changeResponse: function (tweet, response) {
       tweet.selectedResponse = response
+    },
+    showBeforeText: function (stat) {
+      stat.beforeText = stat.previous_5.map(p => `<p>${p}</p>`).join('')
+      this.$forceUpdate()
+    },
+    showAfterText: function (stat) {
+      stat.afterText = stat.next_5.map(p => `<p>${p}</p>`).join('')
+      this.$forceUpdate()
     }
   }
 }
