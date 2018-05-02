@@ -70,6 +70,7 @@ export default {
     ]),
     filteredStats: function () {
       let q = this.searchQuery.toLowerCase()
+      let regex = new RegExp(q, 'ig')
       // if (!q.length) {
       //   return this.stats.map(x => {
       //     x.formattedStat = x.stat
@@ -79,10 +80,10 @@ export default {
       if (!q.length) return []
       let results = []
       for (let i = 0; i < this.stats.length; i++) {
-        if (this.stats[i].sentence.toLowerCase().indexOf(q) > 0) {
+        if (this.stats[i].sentence.match(regex) !== null) {
           results.push(this.stats[i])
         }
-        if (results.length > 30) break
+        if (results.length > 29) break
       }
 
       results.forEach(x => {
@@ -90,7 +91,7 @@ export default {
         x.formattedStat = x.sentence
         x.id = Math.random()
         x.beforeText = '<p><a><small>Show more</small></a></p>'
-        x.formattedStat = x.formattedStat.toLowerCase().replace(q, '<strong class="highlightText">' + q + '</strong>')
+        x.formattedStat = x.formattedStat.replace(regex, '<strong class="highlightText">' + q + '</strong>')
         x.afterText = '<p><a><small>Show more</small></a></p>'
         return x
       })
