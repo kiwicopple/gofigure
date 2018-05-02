@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import stats from './stats'
+import stats from './stats2'
 Vue.use(Vuex)
 
 const getters = {

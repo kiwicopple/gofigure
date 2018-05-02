@@ -27,15 +27,16 @@
       <div class="news-item columns is-centered" v-for="(stat, index) in filteredStats" :key="index">
 
         <div class="feed column is-6">
-          <img :src="stat.image" v-if="stat.image" class="result-img">
-            <h6 class="title is-6"><a v-bind:href="stat.url">{{stat.title}}</a></h6>
-            <p class="subtitle small-sub"><small>{{stat.date}} - {{stat.source}}</small></p>
-            <div class="field content">
-              <span v-html="stat.formattedStat"></span>
-            </div>
-            <div class="buttons has-addons is-right">
-              <button class="button is-small" v-clipboard:copy="stat.stat" >COPY</button>
-            </div>
+          <img :src="stat.image_link" v-if="stat.image_link" class="result-img" />
+          <h6 class="title is-6"><a v-bind:href="stat.link">{{stat.link}}</a></h6>
+          <!-- <p class="subtitle small-sub"><small>{{stat.date}} - {{stat.source}}</small></p> -->
+          <div class="field content">
+            <span v-html="stat.formattedStat"></span>
+            <!-- <span v-html="stat.sentence"></span> -->
+          </div>
+          <div class="buttons has-addons is-right">
+            <button class="button is-small" v-clipboard:copy="stat.stat" >COPY</button>
+          </div>
         </div>
 
       </div>
@@ -68,18 +69,25 @@ export default {
     ]),
     filteredStats: function () {
       let q = this.searchQuery.toLowerCase()
-      if (!q.length) {
-        return this.stats.map(x => {
-          x.formattedStat = x.stat
-          return x
-        })
+      // if (!q.length) {
+      //   return this.stats.map(x => {
+      //     x.formattedStat = x.stat
+      //     return x
+      //   })
+      // }
+      if (!q.length) return []
+      let results = []
+      for (let i = 0; i < this.stats.length; i++) {
+        if (this.stats[i].sentence.toLowerCase().indexOf(q) > 0) {
+          results.push(this.stats[i])
+        }
+        if (results.length > 30) break
       }
-      return this.stats
-        .filter(x => x.stat.toLowerCase().indexOf(q) > 0)
+      return results
         .map(x => {
           let y = Object.assign({}, x)
-          y.formattedStat = y.stat
-          y.formattedStat = y.formattedStat.replace(q, '<strong class="highlightText">' + q + '</strong>')
+          y.formattedStat = y.sentence
+          y.formattedStat = y.formattedStat.toLowerCase().replace(q, '<strong class="highlightText">' + q + '</strong>')
           return y
         })
     }
